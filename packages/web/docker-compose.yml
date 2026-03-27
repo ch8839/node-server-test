@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: local-mysql
+    restart: always # 容器退出时自动重启
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: test_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+  # adminer:
+  #   image: adminer
+  #   container_name: local-adminer
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"

@@ -1,0 +1,59 @@
+.root {
+  width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.searchWrap {
+  width: min(760px, 100%);
+  margin: 8px auto 0;
+}
+
+.surfaceCard {
+  border-radius: 12px;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-surface);
+  background: var(--color-surface);
+  transition: box-shadow 0.24s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-surface-hover);
+  }
+}
+
+.filterHead {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.segmented {
+  :global(.ant-segmented) {
+    background: color-mix(in srgb, var(--color-surface) 90%, var(--color-page-bg) 10%);
+  }
+}
+
+.checkableTags {
+  :global(.ant-tag-checkable) {
+    border-radius: 999px;
+    padding-inline: 10px;
+  }
+}
+
+.titleNoMargin {
+  margin-bottom: 0 !important;
+}
+
+.paragraphNoMargin {
+  margin-bottom: 0 !important;
+}
+
+.materialCard {
+  height: 100%;
+}
+
+.cardHeader {
+  width: 100%;
+  justify-content: space-between;
+}

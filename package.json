@@ -4,10 +4,13 @@
   "private": true,
   "description": "Local dev & test server monorepo",
   "scripts": {
-    "dev": "pnpm --filter server dev",
-    "build": "pnpm --filter server build",
+    "dev:server": "pnpm --filter server dev",
+    "dev:web": "pnpm --filter web dev",
+    "build:server": "pnpm --filter server build",
+    "build:web": "pnpm --filter web build",
     "db:generate": "pnpm --filter server db:generate",
-    "db:push": "pnpm --filter server db:push"
+    "db:push": "pnpm --filter server db:push",
+    "db:migrate": "pnpm --filter server db:migrate"
   },
   "keywords": [],
   "author": "",

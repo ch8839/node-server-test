@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { todoService } from '../services/todo.service';
 import type { ApiResponse, PaginatedData } from '../types';
-import type { Todo } from '@prisma/client';
+import type { Todo } from '@prisma/generated';
 
 function success<T>(res: Response<ApiResponse<T>>, data: T, message = 'ok', code = 200) {
   res.status(code).json({ code, data, message });

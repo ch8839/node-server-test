@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma';
 import { AppError } from '../types';
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/generated';
+import type { CreateTodoType, UpdateTodoType } from '@monorepo/shared/schemas/todo.schema';
 
 export class TodoService {
   async findAll(params: {
@@ -36,13 +37,13 @@ export class TodoService {
     return todo;
   }
 
-  async create(data: { title: string; content?: string; priority?: number }) {
+  async create(data: CreateTodoType) {
     return prisma.todo.create({ data });
   }
 
   async update(
     id: number,
-    data: { title?: string; content?: string; completed?: boolean; priority?: number },
+    data: UpdateTodoType,
   ) {
     await this.findById(id);
     return prisma.todo.update({ where: { id }, data });
