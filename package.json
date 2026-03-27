@@ -2,6 +2,7 @@
   "name": "node-server-test",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Local dev & test server monorepo",
   "scripts": {
     "dev:server": "pnpm --filter server dev",
@@ -10,7 +11,22 @@
     "build:web": "pnpm --filter web build",
     "db:generate": "pnpm --filter server db:generate",
     "db:push": "pnpm --filter server db:push",
-    "db:migrate": "pnpm --filter server db:migrate"
+    "db:migrate": "pnpm --filter server db:migrate",
+    "lint": "eslint packages/ --max-warnings 0",
+    "lint:fix": "eslint packages/ --fix --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p packages/web/tsconfig.app.json && tsc --noEmit -p packages/server/tsconfig.json",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss,html,yaml,yml}": [
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "",

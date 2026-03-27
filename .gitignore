@@ -1,4 +1,14 @@
 node_modules/
-.pnpm-store/
 dist/
+generated/
+.pnpm-store/
+.DS_Store
 *.log
+*.tsbuildinfo
+
+# env files
+.env
+.env*.local
+
+# docker data
+mysql-data/
