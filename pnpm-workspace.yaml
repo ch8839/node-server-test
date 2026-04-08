@@ -1,2 +1,4 @@
 packages:
   - 'packages/*'
+
+useNodeVersion: 20.20.2

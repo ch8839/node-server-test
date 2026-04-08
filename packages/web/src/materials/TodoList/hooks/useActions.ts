@@ -1,57 +1,52 @@
-import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 import {
   CreateTodoType,
   UpdateTodoType,
-} from "@monorepo/shared/schemas/todo.schema";
-import { getTodoList, createTodo, deleteTodo, updateTodo } from "../api";
-import { IdParamsType } from "../types";
+  QueryParamsType,
+} from '@monorepo/shared/schemas/todo.schema';
+import { getTodoList, createTodo, deleteTodo, updateTodo } from '../api';
+import { IdParamsType } from '../types';
 
-export const useGetTodoList = () => {
-  const { data, error, isLoading, mutate } = useSWR("/todos", getTodoList);
-  return { data, error, isLoading, mutate };
+export const useGetTodoList = (params?: QueryParamsType) => {
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
+    ['/todos', params],
+    () => getTodoList(params),
+    { keepPreviousData: true },
+  );
+  return { data, error, isLoading, isValidating, mutate };
 };
 
 export const useCreateTodo = () => {
-  const { mutate } = useGetTodoList();
   const { trigger, isMutating } = useSWRMutation(
-    "/todos/create",
+    '/todos/create',
     (_, { arg }: { arg: CreateTodoType }) => createTodo(arg),
     {
-      onSuccess: () => {
-        mutate();
-      },
-    }
+      onSuccess: () => {},
+    },
   );
   return { trigger, isMutating };
 };
 
 export const useDeleteTodo = () => {
-  const { mutate } = useGetTodoList();
   const { trigger, isMutating } = useSWRMutation(
-    "/todos/delete",
+    '/todos/delete',
     (_, { arg }: { arg: IdParamsType }) => deleteTodo(arg.id),
 
     {
-      onSuccess: () => {
-        mutate();
-      },
-    }
+      onSuccess: () => {},
+    },
   );
   return { trigger, isMutating };
 };
 
 export const useUpdateTodo = () => {
-  const { mutate } = useGetTodoList();
   const { trigger, isMutating } = useSWRMutation(
-    "/todos/update",
-    (_, { arg: { id, ...body } }: { arg: UpdateTodoType & IdParamsType }) =>
-      updateTodo(id, body),
+    '/todos/update',
+    (_, { arg: { id, ...body } }: { arg: UpdateTodoType & IdParamsType }) => updateTodo(id, body),
     {
-      onSuccess: () => {
-        mutate();
-      },
-    }
+      onSuccess: () => {},
+    },
   );
   return { trigger, isMutating };
 };

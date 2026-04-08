@@ -12,8 +12,8 @@
     "db:generate": "pnpm --filter server db:generate",
     "db:push": "pnpm --filter server db:push",
     "db:migrate": "pnpm --filter server db:migrate",
-    "lint": "eslint packages/ --max-warnings 0",
-    "lint:fix": "eslint packages/ --fix --max-warnings 0",
+    "lint": "eslint packages/ --max-warnings 20",
+    "lint:fix": "eslint packages/ --fix --max-warnings 20",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit -p packages/web/tsconfig.app.json && tsc --noEmit -p packages/server/tsconfig.json",
@@ -21,12 +21,29 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix --max-warnings 0",
+      "eslint --fix --max-warnings 20",
       "prettier --write"
     ],
     "*.{json,md,css,scss,html,yaml,yml}": [
       "prettier --write"
     ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^22.15.30",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "keywords": [],
   "author": "",

@@ -8,20 +8,15 @@ function success<T>(res: Response<ApiResponse<T>>, data: T, message = 'ok', code
 }
 
 export class TodoController {
-  async getAll(
-    req: Request,
-    res: Response<ApiResponse<PaginatedData<Todo>>>,
-    next: NextFunction,
-  ) {
+  async getAll(req: Request, res: Response<ApiResponse<PaginatedData<Todo>>>, next: NextFunction) {
     try {
       const page = Math.max(1, Number(req.query.page) || 1);
       const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));
+      const title = req.query.title as string | undefined;
       const completed =
-        req.query.completed === undefined
-          ? undefined
-          : req.query.completed === 'true';
+        req.query.completed === undefined ? undefined : req.query.completed === 'true';
 
-      const data = await todoService.findAll({ page, pageSize, completed });
+      const data = await todoService.findAll({ page, pageSize, completed, title });
       success(res, data);
     } catch (err) {
       next(err);

@@ -8,4 +8,5 @@ export interface Todo {
   updatedAt?: Date;
 }
 
-export type IdParamsType = Pick<Todo, "id">;
+export type IdParamsType = Pick<Todo, 'id'>;
+export type FormValuesType = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>;

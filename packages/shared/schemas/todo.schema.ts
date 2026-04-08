@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const queryParamsSchema = z.object({
+  title: z.string().optional(),
+  completed: z.boolean().optional(),
+  page: z.number().int().min(1).optional(),
+  pageSize: z.number().int().min(1).optional(),
+});
+
 export const idParamsSchema = z.object({
   id: z.string().regex(/^\d+$/, 'id must be a number'),
 });
@@ -17,6 +24,7 @@ export const updateTodoSchema = z.object({
   priority: z.number().int().min(0).max(10).optional(),
 });
 
+export type QueryParamsType = z.infer<typeof queryParamsSchema>;
 export type IdParamsType = z.infer<typeof idParamsSchema>;
 export type CreateTodoType = z.infer<typeof createTodoSchema>;
 export type UpdateTodoType = z.infer<typeof updateTodoSchema>;

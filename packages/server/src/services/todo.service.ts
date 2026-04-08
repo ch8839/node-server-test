@@ -4,16 +4,16 @@ import type { Prisma } from '@prisma/generated';
 import type { CreateTodoType, UpdateTodoType } from '@monorepo/shared/schemas/todo.schema';
 
 export class TodoService {
-  async findAll(params: {
-    page: number;
-    pageSize: number;
-    completed?: boolean;
-  }) {
-    const { page, pageSize, completed } = params;
+  async findAll(params: { page: number; pageSize: number; completed?: boolean; title?: string }) {
+    const { page, pageSize, completed, title } = params;
     const where: Prisma.TodoWhereInput = {};
 
     if (completed !== undefined) {
       where.completed = completed;
+    }
+
+    if (title) {
+      where.title = { contains: title };
     }
 
     const [list, total] = await Promise.all([
@@ -41,10 +41,7 @@ export class TodoService {
     return prisma.todo.create({ data });
   }
 
-  async update(
-    id: number,
-    data: UpdateTodoType,
-  ) {
+  async update(id: number, data: UpdateTodoType) {
     await this.findById(id);
     return prisma.todo.update({ where: { id }, data });
   }

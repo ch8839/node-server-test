@@ -1,63 +1,92 @@
+/** 后端统一响应格式 */
+export interface ApiResponse<T = unknown> {
+  code: number;
+  data: T;
+  message: string;
+}
+
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+type QueryValue = string | number | boolean | undefined | null;
+
 interface FetcherOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
-  headers?: Record<string, any>;
-  params?: Record<string, any>;
-  body?: any;
+  method?: HttpMethod;
+  headers?: Record<string, string>;
+  params?: Record<string, QueryValue>;
+  body?: Record<string, unknown> | Array<unknown>;
   host?: string;
   timeout?: number;
-  abortController? : AbortController
+  abortController?: AbortController;
 }
-const DefaultHost = "http://localhost:3100";
 
-export const fetcher = async <T>(url: string, options: FetcherOptions = {}) => {
+const DEFAULT_HOST = import.meta.env.VITE_API_BASE_URL;
+const DEFAULT_TIMEOUT = 3000;
+const isDev = import.meta.env.DEV;
+
+function buildQueryString(params: Record<string, QueryValue>): string {
+  const filtered: Record<string, string> = {};
+  for (const [key, val] of Object.entries(params)) {
+    if (val !== undefined) {
+      filtered[key] = String(val);
+    }
+  }
+  const qs = new URLSearchParams(filtered).toString();
+  return qs ? `?${qs}` : '';
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
+export async function fetcher<T = unknown>(
+  url: string,
+  options: FetcherOptions = {},
+): Promise<ApiResponse<T>> {
   const {
-    method = "GET",
+    method = 'GET',
     headers = {},
     params,
     body,
-    host = DefaultHost,
-    timeout = 3000,
+    host = DEFAULT_HOST,
+    timeout = DEFAULT_TIMEOUT,
     abortController,
   } = options;
-  const queryString = params ? "?" + new URLSearchParams(params).toString() : '';
+
+  const queryString = params ? buildQueryString(params) : '';
   const requestUrl = `${host}${url}${queryString}`;
-  const controller = abortController || new AbortController();
-  // 结合 setTimeout 调用 controller.abort() 实现请求超时中止
-  const timeId = setTimeout(() => controller.abort(), timeout);
-  const fetchOptions = {
-    method,
-    headers: {
-      "content-type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : null,
-    // 通过 AbortController 创建的 signal 传递给 fetch，可以在稍后通过 AbortController 取消该请求
-    signal: controller.signal,
-  }
-  console.log('>>>fetchOptions', fetchOptions)
+
+  const controller = abortController ?? new AbortController();
+  const timerId = setTimeout(() => controller.abort(), timeout);
+
   try {
-    const response = await fetch(requestUrl, fetchOptions);
-    
-    clearTimeout(timeId);
+    const response = await fetch(requestUrl, {
+      method,
+      headers: { 'content-type': 'application/json', ...headers },
+      body: body ? JSON.stringify(body) : null,
+      signal: controller.signal,
+    });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData: ApiResponse = await response
+        .json()
+        .catch(() => ({ code: response.status, data: null, message: response.statusText }));
       throw new Error(
-        `HTTP error! Status: ${response.status}, Message: ${
-          errorData.message || "Unknown error"
-        }`
+        `HTTP error! Status: ${response.status}, Message: ${errorData.message || 'Unknown error'}`,
       );
     }
 
-    const res = (await response.json()) as T;
-    console.log('>>>res', res)
-    return res
-  } catch (error: any) {
-    // 处理超时
-    if (error.name === "AbortError") {
-      throw new Error("Request timeout");
-    } else {
-      throw new Error(`Fetch error: ${error.message}`);
+    const res = (await response.json()) as ApiResponse<T>;
+    if (isDev) console.log(`[fetcher] ${method} ${url}`, res);
+    return res;
+  } catch (error: unknown) {
+    if (isAbortError(error)) {
+      throw new Error(`Request timeout: ${method} ${url}`);
     }
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(`Fetch error: ${String(error)}`);
+  } finally {
+    clearTimeout(timerId);
   }
-};
+}
