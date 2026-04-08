@@ -5,7 +5,7 @@
   "description": "Express + TypeScript local dev server",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/src/server.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
@@ -26,6 +26,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "prisma": "7.5.0",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.19.3"
   }
 }
