@@ -9,7 +9,7 @@
     "build:staging": "vite build --mode staging",
     "preview": "vite preview",
     "acm": "node scripts/acm.mjs",
-    "deploy:web": "npm install -g pnpm@9 && pnpm install --filter web... --prod=false && pnpm --filter web build"
+    "deploy:web": "npm install -g pnpm@9 && pnpm install --filter web...&& pnpm build --filter web"
   },
   "dependencies": {
     "@monorepo/shared": "workspace:*",
