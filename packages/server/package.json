@@ -10,7 +10,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "deploy:server": "pnpm install --filter server... --prod=false && pnpm --filter server build && pnpm --filter server prune --prod"
   },
   "dependencies": {
     "@monorepo/shared": "workspace:*",
