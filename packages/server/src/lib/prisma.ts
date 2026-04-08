@@ -13,6 +13,7 @@ function createPrismaClient() {
     user: config.database.username,
     password: config.database.password,
     database: config.database.database,
+    ssl: config.database.ssl,
   });
 
   return new PrismaClient({

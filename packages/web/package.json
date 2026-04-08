@@ -8,11 +8,10 @@
     "build": "vite build",
     "build:staging": "vite build --mode staging",
     "preview": "vite preview",
-    "acm": "node scripts/acm.mjs",
-    "deploy:web": "npm install -g pnpm@9 && pnpm install --filter web...&& pnpm build --filter web"
+    "acm": "node scripts/acm.mjs"
   },
   "dependencies": {
-    "@monorepo/shared": "workspace:*",
+    "@monorepo/shared": "file:../shared",
     "@ant-design/icons": "^5.6.1",
     "@tailwindcss/vite": "^4.2.2",
     "antd": "^5.27.1",

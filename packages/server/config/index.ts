@@ -11,6 +11,7 @@ interface DatabaseConfig {
   username: string;
   password: string;
   database: string;
+  ssl: boolean;
 }
 
 interface ServerConfig {
@@ -40,7 +41,6 @@ function optional(key: string, fallback: string): string {
 
 export function loadConfig(): AppConfig {
   const env = optional('NODE_ENV', 'development');
-
   const database: DatabaseConfig = {
     type: optional('DB_TYPE', 'mysql'),
     host: optional('DB_HOST', '127.0.0.1'),
@@ -48,12 +48,13 @@ export function loadConfig(): AppConfig {
     username: optional('DB_USERNAME', 'root'),
     password: required('DB_PASSWORD'),
     database: optional('DB_DATABASE', 'dev_local_db'),
+    ssl: optional('DB_SSL', 'false') === 'true',
   };
 
   const databaseUrl =
     process.env.DATABASE_URL ||
-    `${database.type}://${database.username}:${database.password}@${database.host}:${database.port}/${database.database}`;
-
+    `${database.type}://${database.username}:${database.password}@${database.host}:${database.port}/${database.database}${database.ssl ? '?sslaccept=strict' : ''}`;
+  console.log('>>>databaseUrl', databaseUrl);
   return {
     env,
     isDev: env === 'development',

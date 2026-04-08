@@ -97,7 +97,7 @@ importers:
         specifier: ^5.6.1
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@monorepo/shared':
-        specifier: workspace:*
+        specifier: file:../shared
         version: link:../shared
       '@tailwindcss/vite':
         specifier: ^4.2.2
