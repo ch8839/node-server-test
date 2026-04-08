@@ -59,7 +59,7 @@ export function loadConfig(): AppConfig {
     isDev: env === 'development',
     isProd: env === 'production',
     server: {
-      port: Number(optional('SERVER_PORT', '3100')),
+      port: Number(optional('PORT', optional('SERVER_PORT', '3100'))),
     },
     database,
     databaseUrl,
