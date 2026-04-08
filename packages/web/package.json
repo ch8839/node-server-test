@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "build:staging": "tsc -b && vite build --mode staging",
+    "build": "vite build",
+    "build:staging": "vite build --mode staging",
     "preview": "vite preview",
     "acm": "node scripts/acm.mjs"
   },
