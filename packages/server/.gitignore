@@ -2,3 +2,5 @@ node_modules/
 dist/
 generated/
 .env
+.env.development
+.env.production

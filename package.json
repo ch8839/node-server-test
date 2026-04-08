@@ -17,7 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit -p packages/web/tsconfig.app.json && tsc --noEmit -p packages/server/tsconfig.json",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
