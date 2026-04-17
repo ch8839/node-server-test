@@ -12,6 +12,8 @@ interface DatabaseConfig {
   password: string;
   database: string;
   ssl: boolean;
+  /** MySQL 8+ caching_sha2_password：与 mariadb 驱动 allowPublicKeyRetrieval 一致 */
+  allowPublicKeyRetrieval: boolean;
 }
 
 interface ServerConfig {
@@ -49,12 +51,14 @@ export function loadConfig(): AppConfig {
     password: required('DB_PASSWORD'),
     database: optional('DB_DATABASE', 'dev_local_db'),
     ssl: optional('DB_SSL', 'false') === 'true',
+    allowPublicKeyRetrieval: optional('DB_ALLOW_PUBLIC_KEY_RETRIEVAL', 'false') === 'true',
   };
 
   const databaseUrl =
     process.env.DATABASE_URL ||
     `${database.type}://${database.username}:${database.password}@${database.host}:${database.port}/${database.database}${database.ssl ? '?sslaccept=strict' : ''}`;
   console.log('>>>databaseUrl', databaseUrl);
+
   return {
     env,
     isDev: env === 'development',

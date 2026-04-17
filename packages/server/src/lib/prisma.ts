@@ -14,6 +14,7 @@ function createPrismaClient() {
     password: config.database.password,
     database: config.database.database,
     ssl: config.database.ssl,
+    allowPublicKeyRetrieval: config.database.allowPublicKeyRetrieval,
   });
 
   return new PrismaClient({
